@@ -1,7 +1,8 @@
 package tech.biblioteca.model;
 
 public class Livro implements ItemBiblioteca {
-    private String titulo;
+    // Adicionado o 'final' aqui
+    private final String titulo;
 
     public Livro(String titulo) {
         this.titulo = titulo;

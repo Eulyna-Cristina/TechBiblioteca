@@ -1,6 +1,6 @@
 // SEM LINHA DE PACKAGE AQUI (Já que ela está direto no src)
 
-// IMPORTS EXPLÍCITOS (Isso garante que o VS Code encontre cada arquivo sem erro)
+// IMPORTS EXPLÍCITOS (Isso garante que o VS Code encontre cada arquivo
 import tech.biblioteca.model.ItemBiblioteca;
 import tech.biblioteca.factory.CriadorItem;
 import tech.biblioteca.factory.CriadorLivro;
