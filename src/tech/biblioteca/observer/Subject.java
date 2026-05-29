@@ -5,7 +5,7 @@ import java.util.List;
 import tech.biblioteca.observer.Observer;
 
 public abstract class Subject {
-    // Aqui ele vai usar o SEU tech.biblioteca.observer.Observer automaticamente
+
     private final List<Observer> observadores = new ArrayList<>();
 
     public void registrarObservador(Observer o) {
