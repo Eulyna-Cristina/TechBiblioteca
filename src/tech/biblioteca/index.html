@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechBiblioteca - Dashboard</title>
+    <title>TechBiblioteca - Dashboard Dinâmico</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -13,7 +13,7 @@
             color: #333;
         }
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
         }
         h1 {
@@ -23,7 +23,7 @@
         }
         .grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.2fr 0.8fr;
             gap: 20px;
         }
         .card {
@@ -42,22 +42,26 @@
             background-color: #3498db;
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: 4px;
             cursor: pointer;
             font-weight: bold;
-            margin-top: 10px;
         }
         button:hover { background-color: #2980b9; }
-        button.btn-success { background-color: #2ecc71; }
-        button.btn-success:hover { background-color: #27ae60; }
+        .btn-dev {
+            background-color: #2ecc71;
+            float: right;
+            font-size: 12px;
+            padding: 5px 10px;
+        }
+        .btn-dev:hover { background-color: #27ae60; }
         .log-box {
             background-color: #2c3e50;
             color: #2ecc71;
             font-family: 'Courier New', Courier, monospace;
             padding: 15px;
             border-radius: 6px;
-            height: 200px;
+            height: 380px;
             overflow-y: auto;
             margin-top: 10px;
         }
@@ -66,54 +70,85 @@
             padding: 0;
         }
         .item-list li {
-            padding: 10px;
+            padding: 12px;
             background: #f8f9fa;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             border-radius: 4px;
             border-left: 4px solid #3498db;
+            display: block;
+            clear: both;
+            overflow: hidden;
+            line-height: 24px;
+            transition: all 0.3s ease; /* Efeito suave na transição de cor */
+        }
+        /* Nova regra para quando o item for devolvido */
+        .item-list li.devolvido {
+            background-color: #d4edda !important; /* Verde claro de sucesso */
+            border-left: 4px solid #2ecc71; /* Borda verde */
+        }
+        .badge-disponivel {
+            background-color: #2ecc71;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 10px;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>📚 TechBiblioteca - Padrões de Projeto</h1>
+    <h1>📚 TechBiblioteca - Dashboard Geral de Padrões</h1>
 
     <div class="grid">
         <div class="card">
-            <h2>🏭 Padrão Factory Method</h2>
-            <p>Selecione o tipo de item para criar através da fábrica:</p>
-            <select id="tipoItem" style="padding: 8px; width: 100%; margin-bottom: 10px;">
-                <option value="livro">Livro Impresso</option>
-                <option value="notebook">Notebook Institucional</option>
-            </select>
-            <input type="text" id="identificadorItem" placeholder="Título ou Modelo do Item" style="padding: 8px; width: 94%; margin-bottom: 10px;">
-            <button onclick="criarItemPelaFabrica()">Criar Item via Factory</button>
+            <h2> Padrão Factory Method</h2>
+            <p>Cadastrar novo item na biblioteca através da fábrica:</p>
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <select id="tipoItem" style="padding: 8px; width: 30%;">
+                    <option value="livro">Livro Impresso</option>
+                    <option value="notebook">Notebook</option>
+                </select>
+                <input type="text" id="identificadorItem" placeholder="Título do Livro ou Modelo do Notebook" style="padding: 8px; flex-grow: 1;">
+                <button onclick="criarItemPelaFabrica()">Criar via Factory</button>
+            </div>
 
-            <h3>Itens Criados no Sistema:</h3>
+            <h3>📋 Acervo Digital & Controle de Devolução (Observer)</h3>
+            <p><small style="color: #7f8c8d;">Clique em "Devolver" em qualquer item para simular o gatilho do Observer para <strong>Lenilson</strong> e <strong>Eulyna</strong>.</small></p>
             <ul id="listaItens" class="item-list">
-                <li>[LIVRO IMPRESSO] Título: Dom Casmurro</li>
-                <li>[LIVRO IMPRESSO] Título: Outlander</li>
-                <li>[HARDWARE] Notebook: Dell Inspiron 15 (Uso Local)</li>
-                <li>[HARDWARE] Notebook: Samsung Book 2 (Uso Local)</li>
+                <li>
+                    <span class="texto-item">[LIVRO IMPRESSO] Título: Dom Casmurro</span>
+                    <button class="btn-dev" onclick="devolverItemEspecifico(this, '[LIVRO] Dom Casmurro')">🔄 Devolver</button>
+                </li>
+                <li>
+                    <span class="texto-item">[LIVRO IMPRESSO] Título: Outlander</span>
+                    <button class="btn-dev" onclick="devolverItemEspecifico(this, '[LIVRO] Outlander')">🔄 Devolver</button>
+                </li>
+                <li>
+                    <span class="texto-item">[HARDWARE] Notebook: Dell Inspiron 15 (Uso Local)</span>
+                    <button class="btn-dev" onclick="devolverItemEspecifico(this, '[NOTEBOOK] Dell Inspiron 15')">🔄 Devolver</button>
+                </li>
+                <li>
+                    <span class="texto-item">[HARDWARE] Notebook: Samsung Book 2 (Uso Local)</span>
+                    <button class="btn-dev" onclick="devolverItemEspecifico(this, '[NOTEBOOK] Samsung Book 2')">🔄 Devolver</button>
+                </li>
             </ul>
         </div>
 
         <div class="card">
-            <h2>🔔 Padrão Observer</h2>
-            <p><strong>Item Monitorado:</strong> <span id="nomeItemMonitorado">Nenhum</span></p>
-
-            <button class="btn-success" onclick="simularDevolucao()">Simular Devolução (Disponível)</button>
-
-            <h3>Console de Notificações (Observers):</h3>
-            <div id="consoleObserver" class="log-box">[Aguardando eventos...]</div>
+            <h2>🔔 Central de Notificações</h2>
+            <p><strong>Observadores Ativos:</strong> <br>👥 Lenilson & Eulyna</p>
+            <h3>Console de Eventos:</h3>
+            <div id="consoleObserver" class="log-box">[Nenhum item devolvido ainda. Aguardando cliques em 'Devolver'...]</div>
         </div>
     </div>
 </div>
 
 <script>
     // ==========================================
-    // 1. IMPLEMENTAÇÃO DO FACTORY METHOD (JS)
+    // 1. IMPLEMENTAÇÃO DO FACTORY METHOD
     // ==========================================
     class CriadorItem {
         criarItem(tipo, atributo) {
@@ -125,7 +160,7 @@
     const fabrica = new CriadorItem();
 
     // ==========================================
-    // 2. IMPLEMENTAÇÃO DO OBSERVER (JS)
+    // 2. IMPLEMENTAÇÃO DO OBSERVER
     // ==========================================
     class ItemDisponibilidade {
         constructor(nomeItem) {
@@ -137,11 +172,14 @@
         }
         notificarTodos() {
             const consoleBox = document.getElementById('consoleObserver');
-            consoleBox.innerHTML = `<strong>Status: O item '${this.nomeItem}' foi devolvido!</strong><br><br>`;
 
+            let log = `<strong>Status: O item '${this.nomeItem}' foi devolvido!</strong><br>`;
             this.observadores.forEach(obs => {
-                consoleBox.innerHTML += `📩 Notificação enviada para [${obs.nome}]: O item '${this.nomeItem}' já está disponível!<br>`;
+                log += `📩 Alerta enviado para [${obs.nome}]: O item '${this.nomeItem}' já está disponível para retirada!<br>`;
             });
+            log += `<hr style="border-color: #34495e; margin: 10px 0;">`;
+
+            consoleBox.innerHTML = log + consoleBox.innerHTML;
         }
     }
 
@@ -151,46 +189,56 @@
         }
     }
 
-    // Configuração inicial do Observer simulado com o Dell Inspiron 15 (Igual à sua Main)
-    // Nomes alterados para Lenilson e Eulyna
-    let itemMonitorado = new ItemDisponibilidade("Dell Inspiron 15");
-    itemMonitorado.registrarObservador(new UsuarioObserver("Lenilson"));
-    itemMonitorado.registrarObservador(new UsuarioObserver("Eulyna"));
-
-    document.getElementById('nomeItemMonitorado').innerText = itemMonitorado.nomeItem;
-
     // ==========================================
     // INTERAÇÕES DA TELA (DOM)
     // ==========================================
+
+    function devolverItemEspecifico(botaoClicado, nomeDoProduto) {
+        // 1. Executa a lógica clássica do Observer
+        let sujeito = new ItemDisponibilidade(nomeDoProduto);
+        sujeito.registrarObservador(new UsuarioObserver("Lenilson"));
+        sujeito.registrarObservador(new UsuarioObserver("Eulyna"));
+        sujeito.notificarTodos();
+
+        // 2. MODIFICAÇÃO VISUAL: Acha a linha (li) onde o botão estava inserido
+        let linhaItem = botaoClicado.parentElement;
+
+        // Adiciona a classe CSS que deixa o fundo verde claro
+        linhaItem.classList.add('devolvido');
+
+        // Adiciona uma tag estilizada escrito "Disponível" ao lado do texto
+        let spanTexto = linhaItem.querySelector('.texto-item');
+        if (!linhaItem.querySelector('.badge-disponivel')) {
+            let badge = document.createElement('span');
+            badge.className = 'badge-disponivel';
+            badge.innerText = 'Disponível';
+            spanTexto.appendChild(badge);
+        }
+
+        // Esconde o botão para indicar que já foi devolvido
+        botaoClicado.style.display = 'none';
+    }
+
     function criarItemPelaFabrica() {
         const tipo = document.getElementById('tipoItem').value;
         const info = document.getElementById('identificadorItem').value;
 
-        if(!info) { alert("Digite o nome/modelo do item!"); return; }
+        if(!info) { alert("Digite o nome ou modelo do item!"); return; }
 
-        // Usa o Factory
         const novoItemTexto = fabrica.criarItem(tipo, info);
+        const tagTipo = tipo === 'livro' ? '[LIVRO] ' : '[NOTEBOOK] ';
 
-        // Adiciona na lista visual
         const lista = document.getElementById('listaItens');
         const li = document.createElement('li');
-        li.innerText = novoItemTexto;
+
+        // Mantém a mesma estrutura de classes para os itens dinâmicos criados na hora
+        li.innerHTML = `
+            <span class="texto-item">${novoItemTexto}</span>
+            <button class="btn-dev" onclick="devolverItemEspecifico(this, '${tagTipo}${info}')">🔄 Devolver</button>
+        `;
+
         lista.appendChild(li);
-
-        // Se o usuário criar um novo notebook na tela (como o Samsung Book 2),
-        // o monitor passa a escutar esse novo dispositivo dinamicamente.
-        if(tipo === 'notebook') {
-            itemMonitorado = new ItemDisponibilidade(info);
-            itemMonitorado.registrarObservador(new UsuarioObserver("Lenilson"));
-            itemMonitorado.registrarObservador(new UsuarioObserver("Eulyna"));
-            document.getElementById('nomeItemMonitorado').innerText = itemMonitorado.nomeItem;
-        }
-
         document.getElementById('identificadorItem').value = '';
-    }
-
-    function simularDevolucao() {
-        itemMonitorado.notificarTodos();
     }
 </script>
 </body>
