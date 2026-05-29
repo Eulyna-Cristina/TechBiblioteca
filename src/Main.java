@@ -1,6 +1,4 @@
-// SEM LINHA DE PACKAGE AQUI (Já que ela está direto no src)
 
-// IMPORTS EXPLÍCITOS (Isso garante que o VS Code encontre cada arquivo
 import tech.biblioteca.model.ItemBiblioteca;
 import tech.biblioteca.factory.CriadorItem;
 import tech.biblioteca.factory.CriadorLivro;
@@ -18,11 +16,15 @@ public class Main {
 
         // Criando os itens através do padrão Factory Method
         ItemBiblioteca livro1 = fabricaLivros.criarItem("Dom Casmurro");
+        ItemBiblioteca livro2 = fabricaLivros.criarItem("Outlander");
         ItemBiblioteca note1 = fabricaNotebooks.criarItem("Dell Inspiron 15");
+        ItemBiblioteca note2= fabricaNotebooks.criarItem("Samsung Book 2");
 
         // Exibindo os detalhes específicos de cada classe filha
         livro1.exibirDetalhes();
+        livro2.exibirDetalhes();
         note1.exibirDetalhes();
+        note2.exibirDetalhes();
 
         System.out.println("\n--- 2. TESTANDO OBSERVER ---");
 
@@ -30,8 +32,8 @@ public class Main {
         ItemDisponibilidade controleNotebook = new ItemDisponibilidade(note1.getTitulo());
 
         // Criando os observadores (Observers)
-        Usuario aluno1 = new Usuario("Carlos");
-        Usuario aluno2 = new Usuario("Mariana");
+        Usuario aluno1 = new Usuario("Lenilson");
+        Usuario aluno2 = new Usuario("Eulyna");
 
         // Registrando os alunos na lista de interesse
         controleNotebook.registrarObservador(aluno1);
@@ -42,7 +44,7 @@ public class Main {
         controleNotebook.setDisponivel(true);
 
         // Simulando um novo empréstimo (Não deve enviar notificações)
-        System.out.println("\nStatus no Sistema: O notebook foi emprestado novamente.");
+        System.out.println("\nStatus no Sistema: O notebook foi emprestado novamente, aguarde ser liberado.");
         controleNotebook.setDisponivel(false);
     }
 }

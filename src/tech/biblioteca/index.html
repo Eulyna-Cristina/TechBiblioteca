@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechBiblioteca - Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h2 {
+            margin-top: 0;
+            color: #34495e;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        button:hover { background-color: #2980b9; }
+        button.btn-success { background-color: #2ecc71; }
+        button.btn-success:hover { background-color: #27ae60; }
+        .log-box {
+            background-color: #2c3e50;
+            color: #2ecc71;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 15px;
+            border-radius: 6px;
+            height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        .item-list {
+            list-style: none;
+            padding: 0;
+        }
+        .item-list li {
+            padding: 10px;
+            background: #f8f9fa;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📚 TechBiblioteca - Padrões de Projeto</h1>
+
+    <div class="grid">
+        <div class="card">
+            <h2>🏭 Padrão Factory Method</h2>
+            <p>Selecione o tipo de item para criar através da fábrica:</p>
+            <select id="tipoItem" style="padding: 8px; width: 100%; margin-bottom: 10px;">
+                <option value="livro">Livro Impresso</option>
+                <option value="notebook">Notebook Institucional</option>
+            </select>
+            <input type="text" id="identificadorItem" placeholder="Título ou Modelo do Item" style="padding: 8px; width: 94%; margin-bottom: 10px;">
+            <button onclick="criarItemPelaFabrica()">Criar Item via Factory</button>
+
+            <h3>Itens Criados no Sistema:</h3>
+            <ul id="listaItens" class="item-list">
+                <li>[LIVRO IMPRESSO] Título: Dom Casmurro</li>
+                <li>[LIVRO IMPRESSO] Título: Outlander</li>
+                <li>[HARDWARE] Notebook: Dell Inspiron 15 (Uso Local)</li>
+                <li>[HARDWARE] Notebook: Samsung Book 2 (Uso Local)</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🔔 Padrão Observer</h2>
+            <p><strong>Item Monitorado:</strong> <span id="nomeItemMonitorado">Nenhum</span></p>
+
+            <button class="btn-success" onclick="simularDevolucao()">Simular Devolução (Disponível)</button>
+
+            <h3>Console de Notificações (Observers):</h3>
+            <div id="consoleObserver" class="log-box">[Aguardando eventos...]</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    // 1. IMPLEMENTAÇÃO DO FACTORY METHOD (JS)
+    // ==========================================
+    class CriadorItem {
+        criarItem(tipo, atributo) {
+            if (tipo === 'livro') return `[LIVRO IMPRESSO] Título: ${atributo}`;
+            if (tipo === 'notebook') return `[HARDWARE] Notebook: ${atributo} (Uso Local)`;
+            return null;
+        }
+    }
+    const fabrica = new CriadorItem();
+
+    // ==========================================
+    // 2. IMPLEMENTAÇÃO DO OBSERVER (JS)
+    // ==========================================
+    class ItemDisponibilidade {
+        constructor(nomeItem) {
+            this.nomeItem = nomeItem;
+            this.observadores = [];
+        }
+        registrarObservador(usuario) {
+            this.observadores.push(usuario);
+        }
+        notificarTodos() {
+            const consoleBox = document.getElementById('consoleObserver');
+            consoleBox.innerHTML = `<strong>Status: O item '${this.nomeItem}' foi devolvido!</strong><br><br>`;
+
+            this.observadores.forEach(obs => {
+                consoleBox.innerHTML += `📩 Notificação enviada para [${obs.nome}]: O item '${this.nomeItem}' já está disponível!<br>`;
+            });
+        }
+    }
+
+    class UsuarioObserver {
+        constructor(nome) {
+            this.nome = nome;
+        }
+    }
+
+    // Configuração inicial do Observer simulado com o Dell Inspiron 15 (Igual à sua Main)
+    // Nomes alterados para Lenilson e Eulyna
+    let itemMonitorado = new ItemDisponibilidade("Dell Inspiron 15");
+    itemMonitorado.registrarObservador(new UsuarioObserver("Lenilson"));
+    itemMonitorado.registrarObservador(new UsuarioObserver("Eulyna"));
+
+    document.getElementById('nomeItemMonitorado').innerText = itemMonitorado.nomeItem;
+
+    // ==========================================
+    // INTERAÇÕES DA TELA (DOM)
+    // ==========================================
+    function criarItemPelaFabrica() {
+        const tipo = document.getElementById('tipoItem').value;
+        const info = document.getElementById('identificadorItem').value;
+
+        if(!info) { alert("Digite o nome/modelo do item!"); return; }
+
+        // Usa o Factory
+        const novoItemTexto = fabrica.criarItem(tipo, info);
+
+        // Adiciona na lista visual
+        const lista = document.getElementById('listaItens');
+        const li = document.createElement('li');
+        li.innerText = novoItemTexto;
+        lista.appendChild(li);
+
+        // Se o usuário criar um novo notebook na tela (como o Samsung Book 2),
+        // o monitor passa a escutar esse novo dispositivo dinamicamente.
+        if(tipo === 'notebook') {
+            itemMonitorado = new ItemDisponibilidade(info);
+            itemMonitorado.registrarObservador(new UsuarioObserver("Lenilson"));
+            itemMonitorado.registrarObservador(new UsuarioObserver("Eulyna"));
+            document.getElementById('nomeItemMonitorado').innerText = itemMonitorado.nomeItem;
+        }
+
+        document.getElementById('identificadorItem').value = '';
+    }
+
+    function simularDevolucao() {
+        itemMonitorado.notificarTodos();
+    }
+</script>
+</body>
+</html>
